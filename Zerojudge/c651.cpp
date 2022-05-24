@@ -56,28 +56,34 @@ int Query(int i ){
 }
 
 signed main(){
-    OAO
+    // OAO
     int q;
-    cin>>n>>q;
+    // cin>>n>>q;
+    scanf("%d%d" , &n, &q);
 
     for(int i=1;i<=n;i++){
-        cin>>arr[i];
+        // cin>>arr[i];
+        scanf( "%d" , &arr[i] );
         Update(i,arr[i]);
     }
 
     int L, R ,idx, v ;
-    bool oper;
+    int oper;
     while(q--){
-        cin>>oper;
+        // cin>>oper;
+        scanf( "%d" , &oper );
         if( oper ){
-            cin>>idx>>v;
+            // cin>>idx>>v;
+            scanf("%d%d" , &idx, &v );
             Update( idx , arr[idx] ); // A xor A =0
             Update( idx , v ); // V xor 0 = V 
             arr[ idx ] = v;
         }
         else{
-            cin>>L>>R;
-            cout<< (Query(R)^Query(L-1)) <<'\n';
+            // cin>>L>>R;
+            scanf("%d%d"  , &L, &R );
+            // cout<< (Query(R)^Query(L-1)) <<'\n';
+            printf( "%d\n"  , ( Query(R)^Query(L-1) ) );
         }
     }
    
