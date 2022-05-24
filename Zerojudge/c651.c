@@ -2,7 +2,7 @@
 #include<stdio.h>
 
 /*
-    
+    AC : BIT + XOR + I/O optimize 
     https://zerojudge.tw/ShowProblem?problemid=c651
 */
 
