@@ -4,7 +4,7 @@ using namespace std;
 #define MAX_W 100005
 #define MAX_N 105
 /*
-0/1 knapsack
+    AC 0/1 knapsack
 
 */
 int main(){
