@@ -7,6 +7,10 @@ using namespace std;
 #define all(x) x.begin(),x.end()
 #define ll long long 
 
+/*
+    AC : Token Check
+*/
+
 typedef pair<int,int> pii;
 typedef pair<bool,ll> P;
 // 0: oper
