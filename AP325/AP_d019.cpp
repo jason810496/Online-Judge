@@ -17,6 +17,8 @@ ll target , arr[40];
 set<ll> S1 , S2;
 
 void DFS1(int idx,ll val){
+    if( val>target ) return ;
+
     if( idx >= mid ){
         S1.insert( val );
         return ;
@@ -26,7 +28,9 @@ void DFS1(int idx,ll val){
 }
 
 void DFS2(int idx,ll val){
-    if( idx > n ){
+    if( val>target ) return ;
+
+    if( idx >= n ){
         S2.insert( val );
         return ;
     }
@@ -58,7 +62,7 @@ signed main(){
     // }
     // cout<<'\n';
 
-    for(int ai : S1){
+    for(ll ai : S1){
         if( ai > target || flag ) break;
         auto it = S2.lower_bound(target-ai);
 
