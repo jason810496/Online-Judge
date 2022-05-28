@@ -8,9 +8,7 @@ using namespace std;
 
     AC
 */
-int n,Limit;
-
-vector<int> arr;
+int n,Limit , arr[MAX_N] = {};
 
 bool InTime(int cnt){
     
@@ -36,10 +34,8 @@ int main(){
     cin.tie(0);ios_base::sync_with_stdio(0);
     
     cin>>n>>Limit;
-
-    arr.resize(n);
     
-    for(int &i:arr) cin>>i;
+    for(int i=0;i<n;i++) cin>>arr[i];
 
     int L=1 , R=n;
 
