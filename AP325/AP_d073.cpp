@@ -2,14 +2,16 @@
 using namespace std;
 
 /*
-DP
-can't find bug first time ???
+    Ac DP 2D max Matrix sum 
 
 */
 int main(){
     cin.tie(0);ios_base::sync_with_stdio(0);
-    int n,m,dp[205][205],sum,MAX=0;
+    int n,m;
+    long long dp[205][205] = {};
+    long long sum,MAX=0;
     cin>>n>>m;
+
     for(int i=1;i<=n;i++){
         for(int j=1;j<=m;j++){
             cin>>dp[i][j];
@@ -18,12 +20,11 @@ int main(){
     }
 
     for(int i=0;i<n;i++){
-        for(int j=1;j<=n;j++){
+        for(int j=i+1;j<=n;j++){
             sum=0;
             for(int k=1;k<=m;k++){
-                sum+= (dp[j][k] - dp[i][k]);
-                sum=(sum<0 ? 0:sum);
-                MAX=(sum > MAX ? sum: MAX);
+                sum = max( sum + dp[j][k]-dp[i][k] , 0LL );
+                MAX=max( MAX, sum );
             }
         }
     }
