@@ -11,6 +11,12 @@ typedef pair<int,int> pii;
 
 const int INF = 1e9;
 
+/*
+
+    AC: meet in middle ( #define int long long )
+
+*/
+
 int n ,mid ; 
 ll target , arr[40];
 
@@ -51,16 +57,6 @@ signed main(){
 
     ll ans = 0 , cur = 0;
     bool flag = false;
-
-    // for(auto i :S1){
-    //     cout<<i<<' ';
-    // }
-    // cout<<'\n';
-
-    // for(auto i:S2){
-    //     cout<<i<<' ';
-    // }
-    // cout<<'\n';
 
     for(ll ai : S1){
         if( ai > target || flag ) break;
