@@ -3,6 +3,13 @@ using namespace std;
 #define OAO cin.tie(0);ios_base::sync_with_stdio(0);
 #define N (1<<20)
 
+
+/*
+    ref:
+        https://github.com/nevikw39/oj/blob/master/ap325/d081.cpp
+        https://github.com/lbwei1016/Codes/blob/master/Online_judge/Finished/TCIRC_Judge/tcirc_d081_top_down.cpp
+
+*/
 int DP[N] , Wt[N] , n ;
 
 int dp(int cur){
