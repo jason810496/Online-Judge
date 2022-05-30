@@ -2,7 +2,7 @@
 using namespace std;
 
 
-
+#define OAO cin.tie(0);ios_base::sync_with_stdio(0);
 #define F first
 #define S second
 #define ll long long 
@@ -36,7 +36,8 @@ void Change(){
 }
 
 int main(){
-
+    //OAO
+    
     Solution solve;
 
     Change();

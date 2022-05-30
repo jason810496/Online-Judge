@@ -2,7 +2,7 @@
 using namespace std;
 
 
-
+#define OAO cin.tie(0);ios_base::sync_with_stdio(0);
 #define F first
 #define S second
 #define ll long long 
@@ -18,7 +18,29 @@ const int INF = 1e9;
 class Solution {
 public:
     
+    int rearrangeCharacters(string s, string target) {
+        map<char ,int > M , M2;
+        for(char c : s){
+            M[ c ]++;
+        }
 
+        for(char c:target){
+            M2[ c ]++;
+        }
+
+        int Mn = INT_MAX ;
+
+        // for(auto c:target){
+        //     Mn = min( Mn  , M[ c ] );
+        // }
+
+        for(auto i:M2){
+            Mn = min( Mn , M[i.F] / i.S );
+        }
+
+        return Mn;
+
+    }
     
 };
 
@@ -36,6 +58,7 @@ void Change(){
 }
 
 int main(){
+    //OAO
 
     Solution solve;
 
