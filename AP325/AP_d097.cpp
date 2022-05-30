@@ -5,31 +5,26 @@ int n , m , k;
 Unfinish , complex but not hard 
 */
 // row-major : i*(m+1)+j
-inline int Index(int i,int j){ return i*(m+2)+j; }
+inline int idx(int i,int j){
+    return (i*m+j);
+}
 
 int G[505][505],P[505*505],Size[505*505];
+
 int pos[4][2]={{0,1},{1,0},{0,-1},{-1,0}};
 
 inline int Find(int x){
     return x==P[x] ? x : P[x]=Find(P[x]);
 }
+
 void Union(int a,int b){
     a=Find(a);
     b=Find(b);
     if(a==b) return;
 
-    if(Size[a] > Size[b]){
-        Size[a]+=Size[b];
-        Size[b]=0;
-        P[b]=a;
-    }
-    else{
-        swap(a,b);
-
-        Size[a]+=Size[b];
-        Size[b]=0;
-        P[b]=a;
-    }
+    if( Size[b] > Size[b] ) swap(a,b);
+    Size[a]+=Size[b];
+    P[b]=a;
 }
 
 int DFS(int id){
