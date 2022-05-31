@@ -1,10 +1,12 @@
 #include<bits/stdc++.h>
 using namespace std;
-int n , m , k;
+
 /*
-Unfinish , complex but not hard 
+    DFS + DSU + row major 
 */
-// row-major : i*(m+1)+j
+
+int n , m , k;
+
 inline int id(int i,int j){
     return (i*m+j);
 }
@@ -29,7 +31,6 @@ void Union(int a,int b){
     P[b]=a;
 
     Group--;
-    // cout<<" union : "<<a<<"\n";
 }
 
 
@@ -78,38 +79,11 @@ int main(){
                 cur_max = max( cur_max, cur );
 
                 Group++;
-                // cout<<i<<' '<<j<<' '<<cur<<'\n';
             }
         }
     }
 
-    // cout<<"=====\n";
-
-    // for(int i=1;i<=n;i++){
-    //     for(int j=1;j<=m;j++){
-    //         cout<<G[i][j]<<' ';
-    //     }
-    //     cout<<'\n';
-    // }
-    // cout<<"=====\n";
-
-    // for(int i=1;i<=n;i++){
-    //     for(int j=1;j<=m;j++){
-    //         cout<<Size[ id(i,j) ]<<' ';
-    //     }
-    //     cout<<'\n';
-    // }
-    // cout<<"=====\n";
-    // for(int i=1;i<=n;i++){
-    //     for(int j=1;j<=m;j++){
-    //         cout<<P[ id(i,j) ]<<' ';
-    //     }
-    //     cout<<'\n';
-    // }
-
     int sum=cur_max, cnt=Group;
-
-    // cout<<cur_max<<' '<<Group<<'\n';
 
     while(k--){
         int x,y;
@@ -117,8 +91,9 @@ int main(){
 
         G[x][y]=-1;
         Size[ id(x,y) ]=1;
-
+        // itself is a Group 
         Group++;
+
         for(int k=0;k<4;k++){
             int i=x+pos[k][0] , j=y+pos[k][1];
             if( i<=0 || j<=0 || i>n || j>m ) continue;
@@ -129,41 +104,11 @@ int main(){
            
         }
 
-        // -------
-
-    // cout<<"=====\n";
-
-    // for(int i=1;i<=n;i++){
-    //     for(int j=1;j<=m;j++){
-    //         cout<<G[i][j]<<' ';
-    //     }
-    //     cout<<'\n';
-    // }
-    // cout<<"=====\n";
-
-    // for(int i=1;i<=n;i++){
-    //     for(int j=1;j<=m;j++){
-    //         cout<<Size[ id(i,j) ]<<' ';
-    //     }
-    //     cout<<'\n';
-    // }
-    // cout<<"=====\n";
-    // for(int i=1;i<=n;i++){
-    //     for(int j=1;j<=m;j++){
-    //         cout<<P[ id(i,j) ]<<' ';
-    //     }
-    //     cout<<'\n';
-    // }
-
-        // ----
-
         cur = Size[ Find( id(x,y) ) ];
         cur_max = max( cur_max , cur );
         sum+=cur_max;
         cnt+=Group;
     }
-
-    // cout<<cur_max<<'\n'<<Group<<'\n';
 
     cout<<sum<<'\n'<<cnt;
 
