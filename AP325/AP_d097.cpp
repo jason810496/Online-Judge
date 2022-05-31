@@ -5,11 +5,11 @@ int n , m , k;
 Unfinish , complex but not hard 
 */
 // row-major : i*(m+1)+j
-inline int idx(int i,int j){
+inline int id(int i,int j){
     return (i*m+j);
 }
 
-int G[505][505],P[505*505],Size[505*505];
+int G[505][505],P[505*505],Size[505*505] = {};
 
 int pos[4][2]={{0,1},{1,0},{0,-1},{-1,0}};
 
@@ -17,55 +17,155 @@ inline int Find(int x){
     return x==P[x] ? x : P[x]=Find(P[x]);
 }
 
+int Group=0;
+
 void Union(int a,int b){
     a=Find(a);
     b=Find(b);
     if(a==b) return;
 
-    if( Size[b] > Size[b] ) swap(a,b);
+    if( Size[b] > Size[a] ) swap(a,b);
     Size[a]+=Size[b];
     P[b]=a;
+
+    Group--;
+    // cout<<" union : "<<a<<"\n";
 }
 
-int DFS(int id){
-    int ret=0;
+
+int DFS(int x,int y,int root ){
+    P[ id(x,y) ] = root;
+    int ret=G[x][y];
+
+    G[x][y]=-1;
+
     for(int k=0;k<4;k++){
-        int i=I+pos[k][0], j=J+pos[k][1],id2;
-        if(i<1||i>=n||j<1||j>=m) continue;
-        id2=Index(i,j);
-        if(visited[ id2 ] || G[i][j]) continue;
+        int i=x+pos[k][0] , j=y+pos[k][1];
+        if( i<=0 || j<=0 || i>n ||j>m ) continue;
 
-        ret+=DFS()
-        Union(id,id2);
+        if( G[i][j]==1 ){
+            Size[ id(i,j) ]=DFS( i , j ,root );
+            ret+=Size[ id(i,j) ];
+        }
     }
+
+    return ret;
 }
+
 
 int main(){
     cin.tie(0);ios_base::sync_with_stdio(0);
     cin>>n>>m>>k;
+
     int Total=0;
+
     for(int i=1;i<=n;i++){
-        for(int j=1,id;j<=m;j++){
+        for(int j=1, ID ;j<=m;j++){
             cin>>G[i][j];
             // 2D to 1D
-            id=Index(i,j);
+            ID =id(i,j);
             // init DSU
-            P[id]=id;
-            Size[id]=G[i][j];
+            P[ ID ] = ID ;
+            Size[ ID ]=G[i][j];
         }
     }
+
     int cur=0,cur_max=0;
     for(int i=1;i<=n;i++){
         for(int j=1;j<=m;j++){
-            if(!G[i][j] ) DFS( Index(i,j) );
+            if( G[i][j]==1 ){
+                cur = Size[ id(i,j) ] = DFS( i, j , id(i,j) );
+                cur_max = max( cur_max, cur );
+
+                Group++;
+                // cout<<i<<' '<<j<<' '<<cur<<'\n';
+            }
         }
     }
 
-    int I,J;
-    while(k--){
-        cin>>I>>J;
+    // cout<<"=====\n";
 
+    // for(int i=1;i<=n;i++){
+    //     for(int j=1;j<=m;j++){
+    //         cout<<G[i][j]<<' ';
+    //     }
+    //     cout<<'\n';
+    // }
+    // cout<<"=====\n";
+
+    // for(int i=1;i<=n;i++){
+    //     for(int j=1;j<=m;j++){
+    //         cout<<Size[ id(i,j) ]<<' ';
+    //     }
+    //     cout<<'\n';
+    // }
+    // cout<<"=====\n";
+    // for(int i=1;i<=n;i++){
+    //     for(int j=1;j<=m;j++){
+    //         cout<<P[ id(i,j) ]<<' ';
+    //     }
+    //     cout<<'\n';
+    // }
+
+    int sum=cur_max, cnt=Group;
+
+    // cout<<cur_max<<' '<<Group<<'\n';
+
+    while(k--){
+        int x,y;
+        cin>>x>>y;
+
+        G[x][y]=-1;
+        Size[ id(x,y) ]=1;
+
+        Group++;
+        for(int k=0;k<4;k++){
+            int i=x+pos[k][0] , j=y+pos[k][1];
+            if( i<=0 || j<=0 || i>n || j>m ) continue;
+
+            if( G[i][j]==-1){
+                Union( id(x,y) , id(i,j) );
+            }
+           
+        }
+
+        // -------
+
+    // cout<<"=====\n";
+
+    // for(int i=1;i<=n;i++){
+    //     for(int j=1;j<=m;j++){
+    //         cout<<G[i][j]<<' ';
+    //     }
+    //     cout<<'\n';
+    // }
+    // cout<<"=====\n";
+
+    // for(int i=1;i<=n;i++){
+    //     for(int j=1;j<=m;j++){
+    //         cout<<Size[ id(i,j) ]<<' ';
+    //     }
+    //     cout<<'\n';
+    // }
+    // cout<<"=====\n";
+    // for(int i=1;i<=n;i++){
+    //     for(int j=1;j<=m;j++){
+    //         cout<<P[ id(i,j) ]<<' ';
+    //     }
+    //     cout<<'\n';
+    // }
+
+        // ----
+
+        cur = Size[ Find( id(x,y) ) ];
+        cur_max = max( cur_max , cur );
+        sum+=cur_max;
+        cnt+=Group;
     }
+
+    // cout<<cur_max<<'\n'<<Group<<'\n';
+
+    cout<<sum<<'\n'<<cnt;
 
     return 0;
 }
