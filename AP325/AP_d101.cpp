@@ -1,79 +1,91 @@
 #include<bits/stdc++.h>
 using namespace std;
-const int N=1e2+5;
-int P[N],Size[N];
-// unfinished DSU
-multiset<int> Set;
-inline int Find( int x){
-    return x==P[x] ? x: P[x]=Find(P[x]);
-}
-void Union(int a,int b){
-    a=Find(a) , b=Find(b);
-    Set.erase(Set.find(Size[a]));
-    Set.erase(Set.find(Size[b]));
 
-    if(a==b) return ;
-    if(Size[a] > Size[b]){
-        Size[a] +=Size[b];
-        Size[b]=0;
-        P[b]=a;
-        Set.insert(P[a]);
-    }
-    else{
-        swap(a,b);
-        Size[a] +=Size[b];
-        Size[b]=0;
-        P[b]=a;
-        Set.insert(P[a]);
-    }
+#define OAO cin.tie(0);ios_base::sync_with_stdio(0);
+#define F first 
+#define S second 
+#define all(x) x.begin(),x.end()
+
+const int N = 1e5+5;
+
+int P[N] , Size[N] , n , k ;
+
+inline int Find(int x){
+    return (P[x]==x ? x: P[x] = Find( P[x] ) );
 }
-int main(){
-    cin.tie(0);ios_base::sync_with_stdio(0);
-    int n,k;
-    vector<int> G(n+1);
+
+void Union(int a,int b){
+    if( a<=0 || a>n || b<=0 || b>n ) return;
+    a=Find(a);
+    b=Find(b);
+    if( a==b ) return ;
     
-    for(int i=1;i<=n;i++){
-        cin>>G[i];
-        P[i]=i;
-        Size[i]=G[i];
-    }
-    int MAX=1,MIN=1e5,s_Mx=0,s_Mn=0;
-    int id=1;
-    list<int > Mx_i,Mn_i;
+    if( Size[b] > Size[a] ) swap(a,b);
+
+    Size[a]+=Size[b];
+    P[b]=a;
+}
+
+int main(){
+    OAO 
+    cin>>n>>k;
 
     // init
-    while(id<=n){
-        int j=id+1;
-        while(j<=n && G[j]){
-            Union(id,j);
-            j++;
+    for(int i=1;i<=n;i++){
+        cin>>Size[i];
+        P[i]=i;
+    }
+
+    
+    int root=0 , cnt=0 , MX=0 , MN=1e9;
+    multiset<int> Set;
+    for(int i=1;i<=n;i++){
+        if( Size[i]){
+            int root=i;
+            i++;
+            while( i<=n && Size[i]==1){
+                P[i] = root;
+                Size[root]++;
+                i++;
+            }
+
+            MX = max( MX , Size[ root ] );
+            MN = min( MN , Size[ root ] );
+            Set.insert( Size[ root ] );
+        }
+    }
+
+    int x, MX_sum=MX , MN_sum=MN ,cur;
+
+    // cout<<MX_sum<<" : "<<MN_sum<<'\n';
+
+    while(k--){
+        cin>>x;
+        Size[x]=1;
+        Set.insert( Size[x] );
+
+        if( x-1>=1 && Size[ Find(x-1) ]>0 ){
+            Set.erase( Set.find( Size[ Find(x) ] ) );
+            Set.erase( Set.find( Size[ Find(x-1) ] ) );
+            Union(x,x-1);
+            Set.insert( Size[ Find(x) ] );
         }
 
-        id=j;
-    }
-    s_Mx+=*(--Set.end());
-    s_Mn+=*(Set.begin());
+        if( x+1<=n && Size[ Find(x+1) ]>0 ){
+            Set.erase( Set.find( Size[ Find(x) ] ) );
+            Set.erase( Set.find( Size[ Find(x+1) ] ) );
+            Union(x,x+1);
+            Set.insert( Size[ Find(x) ] );
+        }
 
-    for(auto i:Set){
-        cout<<i<<' ';
-    }
-    // while(k--){
+        MX = max( MX , Size[ Find(x) ] );
         
-    //     int t;
-    //     cin>>t;
-    //     // mark red
-    //     G[t]=1;
-    //     Size[t]=1;
+        MX_sum+=MX;
 
-    //     if(t+1 <=n && G[t+1]) Union(t,t+1);
-    //     if(t-1 >0  && G[t-1]) Union(t,t-1);
+        // cout<<(*Set.begin() )<<" mn \n";
+        MN_sum+= (*Set.cbegin() );
+    }
 
-    //     t=Find(t);
-    //     for(auto it=Mn_i.begin();it++;it!=Mn_i.end()){
-    //         if(Size[Find(*it)] <= MIN){
-    //             MIN=Size[Find(*it)];
-    //         }
-    //     }
-    // }
+    cout<<MX_sum<<'\n'<<MN_sum;
     return 0;
 }
