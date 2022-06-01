@@ -1,68 +1,88 @@
 #include<bits/stdc++.h>
 using namespace std;
-#define F first
-#define S second
-const int MX_N = 1e4+5;
-vector<int> G[MX_N];
-int indeg[MX_N]={},wt[MX_N],From[MX_N],outdeg[MX_N]={};
-int main(){
-	int n ; cin>>n;
 
-	for(int i=1;i<=n;i++) cin>>wt[i];
+#define OAO cin.tie(0);ios_base::sync_with_stdio(0);
+#define F first 
+#define S second 
+#define ll long long 
+#define all(x) x.begin(),x.end()
 
-	int u, v ,m ;
-	cin>>m;
+typedef pair<int,int> pii;
+
+const int INF = 1e9;
+
+signed main(){
+	OAO;
+	int n , m ;
+	cin>>n>>m;
+
+	vector<  vector<int> > G(n+1) , GT(n+1); //GT : reverse Graph	
+	vector<int> Wt(n+1) , In(n+1) , Out(n+1) , Dis(n+1 , -INF ); // In: In degree , Out: Out degree 
+
+	for(int i=1;i<=n;i++) cin>>Wt[i];
+
 	while(m--){
-		cin>>u>>v>>w;
-		G[u].push_back(v);
-		indeg[v]++;
-		outdeg[u]++;
+		int a,b;
+		cin>>a>>b;
+
+		G[a].push_back(b);
+		GT[b].push_back(a);
+		In[b]++;
+		Out[a]++;
 	}
 
 	queue<int> q;
-	
+
 	for(int i=1;i<=n;i++){
-		if(!indeg[i]){
+		if( !In[i] ){
 			q.push(i);
-			From[i]=-1;
+			Dis[i] = Wt[i];
 		}
 	}
 
-	while(!q.empty()){
-		u=q.front();
+	while(q.size() ){
+		int cur = q.front();
 		q.pop();
 
-		for(int v:G[u]){
-			if(Dis[v]<Dis[u]+wt[v]){
-				From[v]=u;
-				Dis[v]=Dis[u]+wt[v];
+		for(int nxt : G[cur] ){
+			if( !--In[nxt] ){
+				q.push( nxt );
 			}
-
-			if(--indeg[v]==0){
-				q.push(v);
-			}
+			Dis[nxt] = max( Dis[nxt] , Dis[cur]+Wt[nxt] );
 		}
 	}
 
-	int Mx=0 , node;
-
-	for(int i=0;i<n;i++){
-		if(Dis[i]>Mx){
-			Mx=Dis[i];
-			node=i;
+	int MX_Time=0;
+	for(int i=1;i<=n;i++){
+		if( !Out[i] && MX_Time < Dis[i] ){
+			MX_Time = Dis[i];
 		}
 	}
-	
-	vector<int> ans;
-	do{
-		ans.push_back(node);
-		node=From[node];
-	}while(node!=-1);
 
-	cout<<Mx<<'\n';
-	for(auto it=ans.rbegin();it!=ans.rend();it++){
-		cout<<*it<<' ';
+	for(int i=1;i<=n;i++){
+		if( Dis[i]==MX_Time && !Out[i] ){
+			q.push(i);
+		}
+	}
+
+	set<int> key;
+
+	// backtrade 
+	while( q.size() ){
+		int cur = q.front();
+		q.pop();
+
+		key.insert( cur );
+
+		for(int last : GT[ cur ] ){
+			if( Dis[cur]==Dis[last]+Wt[cur] && key.find( last )==key.end() ){
+				q.push( last );
+			}
+		}
+	}
+	cout<<MX_Time<<'\n';
+	for(int i:key){
+		cout<<i<<' ';
 	}
 	return 0;
-
 }
