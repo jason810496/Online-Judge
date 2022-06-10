@@ -27,31 +27,25 @@ bool check(ll ht){
 			len=0;
 		}
 	}
-
-	if(len>0) vec.push_back(len);
+	if(len>0) vec.push_back(len); // last 
 	
-	//cout<<"check\n";
-	/*for( auto it :vec ){
-		cout<<it<<' ';
-	}
-	cout<<'\n'; */
-	while(vec.size()>=k){
-		
-		int sz=vec.size();
-		bool tag=true;
-		for(int i=0;i<k;i++){
-			if(vec[sz-i-1]<Line[k-i]){
-				vec.pop_back();
-				tag=false;
+	// cout<<ht<<" : ";
+	// for(auto i:vec){
+	// 	cout<<i<<' ';
+	// }
+	// cout<<'\n';
 
-				break;
-			}
+	if( vec.size()<k) return false;
+	
+	int idx=1;
+
+	for(int i=0;i<vec.size() && idx<=k ; i++){
+		if( vec[i]>=Line[ idx ] ){
+			idx++;
 		}
-		//cout<<"t\n";
-		if(tag)return true;
 	}
 
-	return false;
+	return (idx>k) ;
 }
 
 int main(){
@@ -65,15 +59,18 @@ int main(){
 		cin>>arr[i];
 		Mx_ht = max( Mx_ht , arr[i]);
 	}
-	for(int i=1;i<=k;i++){ cin>>Line[i]; }
+	for(int i=1;i<=k;i++){
+		cin>>Line[i];
+	}
 
 	ll L = 1 , R = Mx_ht;
 
 	while( L <= R ){
 		
-		ll mid = L+(R-L)/2;
+		ll mid = (R+L)/2 ;
 		if( check(mid)) {
 			L=mid+1;
+			// cout<<" OK : "<<mid<<"\n";
 			//cout<<"mid+1 "<< mid <<"\n";
 
 		}
