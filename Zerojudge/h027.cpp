@@ -24,7 +24,7 @@ vvi small , big;
 //     i1-- , j1--;
 //     return ( mat[i2][j2]+mat[i1][j1]-mat[i1][j2]-mat[i2][j1] );
 // }
-int big_sum , small_sum;
+ll big_sum , small_sum;
 
 int cnt_diff(int r,int c){
     int cnt=0;
@@ -78,7 +78,8 @@ signed main(){
     int col_shift = m-t;
     
     bool flag = false;
-    int  cnt=0 ,ans=INF; 
+    int  cnt=0 ;
+    ll ans=INT_MAX; 
     for(int r=0;r<=row_shift;r++){
         for(int c=0;c<=col_shift;c++){
             int dif = cnt_diff( r, c );
