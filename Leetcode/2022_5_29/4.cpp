@@ -11,103 +11,62 @@ using namespace std;
 typedef pair<int,int> pii;
 typedef pair<long long,int> pli;
 typedef pair<int,long long> pil;
+typedef vector<int> vi;
+typedef vector< vector<int> > vvi;
 
 const int MAX_N = 100005;
 const int INF = 1e9;
 
 class Solution {
 public:
-    int n , m ;
-    int pos[4][2] = { {0,1} , { 1,0 } ,{ 0,-1 }, {-1,0 } };
+    
+    int n , m , total ;
+    vvi move = { {0,1} , {1,0} , {0,-1} , {-1,0 } };
 
-    vector< vector<int> > DP;
-    int DFS(int x,int y,vector<vector<int> > &g){
-        if(DP[x][y] != INF ) return DP[x][y];
-        if( x==n-1 && y==m-1 ) return DP[x][y] = 0;
-
-        int ret =INF ;
-        for(int k=0;k<4;k++){
-            int i = x+pos[k][0] ,  j= y+pos[k][1];
-            if( i<0 || j<0 ||i>=n ||j>=m ) continue;
-
-            DP[x][y] = min( DP[x][y] , DFS(i,j,g) );
-            ret = min( ret , DP[x][y] );
-        } 
-
-        return DP[x][y] = ret + g[x][y] ;
+    inline int get_id(int i,int j){
+        return i*m+j;
+    }
+    inline pii get_pos(int id){
+        return {id/m , id%m};
     }
 
     int minimumObstacles(vector<vector<int>>& grid) {
-        n = grid.size();
-        m = grid[0].size();
+        n= grid.size() , m =grid[0].size() , total = n*m;
+        vector<int> dis( total , INF );
+        vector< bool > vis( total );
 
-        
-        vector< vector<int> > dp( n , vector<int>(m , INF ) );
+        priority_queue< pii , vector< pii > , greater<pii> > pq;
 
-        dp[0][0] = grid[0][0];
+        dis[0]=0;
+        vis[0]=1;
+        pq.push( { 0 , 0 } );
 
-        // for(int i=0;i<n;i++){
-        //     for(int j=0;j<m;j++){
-        //         cout<<dp[i][j]<<' ';
-        //     }
-        //     cout<<'\n';
-        // }
-        // cout<<"===\n";
+        while( pq.size() ){
+            int D = pq.top().F;
+            int id= pq.top().S;
 
-        // for(int x=0;x<n;x++){
-        //     for(int y=0;y<m;y++){
+            if( id==total-1 ){
+                break;
+            }
+            pq.pop();
+            pii t = get_pos( id );
+            int x=t.F , y=t.S;
 
-        //         for(int k=0;k<4;k++){
-        //             int i = x+pos[k][0] , j= y+pos[k][1];
-        //             if( i<0 || j<0 || i>=n || j>=m ) continue;
+            for(auto &mv: move){
+                int i = x+mv[0] , j = y+mv[1];
+                int nxt_id = get_id( i , j );
+                if( i<0 || j<0 || i>=n || j>=m || vis[ nxt_id ] ) continue;
+                
+                dis[ nxt_id ] = dis[ id ]+grid[i][j];
+                vis[ nxt_id ] = 1;
 
-        //             dp[i][j] = min( dp[i][j] , dp[x][y] + grid[i][j] );
-
-        //         }
-        //     }
-        // }
-
-        dp[n-1][m-1]=0;
-
-        for(int x=n-1;x>=0;x--){
-            for(int y=m-1;y>=0;y--){
-
-                for(int k=0;k<4;k++){
-                    int i = x+pos[k][0] , j= y+pos[k][1];
-                    if( i<0 || j<0 || i>=n || j>=m ) continue;
-
-                    dp[i][j] = min( dp[i][j] , dp[x][y] + grid[i][j] );
-
-                }
+                pq.push( { dis[nxt_id] , nxt_id } );
             }
         }
 
-        for(int i=0;i<n;i++){
-            for(int j=0;j<m;j++){
-                cout<<dp[i][j]<<' ';
-            }
-            cout<<'\n';
-        }
-
-        return dp[0][0];
-
-
-    //    DP.resize( n, vector<int>(m,INF) );
-
-    //     int ans = DFS(0,0,grid);
-
-    //    for(int i=0;i<n;i++){
-    //        for(int j=0;j<m;j++){
-    //            cout<<DP[i][j]<<' ';
-    //        }
-    //        cout<<'\n';
-    //    }
-
-    //    return dp[0][0];
+        return dis[ total-1 ];
     }
-
 };
-
 
 void Change(){
     string str;
