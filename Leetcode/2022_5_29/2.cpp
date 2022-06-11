@@ -17,71 +17,40 @@ const int INF = 1e9;
 
 class Solution {
 public:
-    
-    string discountPrices(string raw, int dis) {
-        vector<int> token;
-        vector<double> dis_token;
-        
-        int t=0;
-        bool is_tk = false;
-        for(char c : raw){
-            if( c=='$' ){
-                is_tk = true;
-                t=0;
-                continue;
-            }
-            else if( is_tk && !isdigit(c) )is_tk = false;
 
-            if( is_tk ){
-                t*=10;
-                t+=(c-'0');
-                continue;
-            }
-            else if( t>0 ){
-                token.push_back( t );
-                t=0;
-            }
+    bool check(string &s){
+        if( s.size()==1 ) return false;
+
+        for(int i=1;i<s.size() ; i++){
+            if( isdigit(s[i] ) ) continue;
+            return false;
         }
-
-        // cout<<"token\n";
-        // for(auto i: token){
-        //     cout<<i<<' ';
-        // }
-        // cout<<'\n';
-
-        // clear
-
-        is_tk= false;
-        string ans;
-        for(char c : raw){
-            if( c=='$' ){
-                is_tk = true;
-                ans.push_back(c);
-            }
-            else if( is_tk && !isdigit(c) )is_tk = false;
-
-            if( is_tk ){
-                continue;
-            }
-            else ans.push_back(c);
-            
-        }
-
-        // cout<<ans;
-
-        for(auto i:token){
-            dis_token.push_back( double(i/dis) );
-        }
-
-        
-
-        return ans;
+        return true;
     }
 
-    
-    
-};
 
+    string discountPrices(string sentence, int discount) {
+        stringstream input(sentence) , output;
+        output.precision(2);
+        string str;
+        long double rate = double(100-discount)/100.0;
+
+        while( input >>str ){
+            if( str[0]=='$' &&check(str) ){
+                long double val = stold( str.substr(1) );
+                val*=rate;
+                output<<'$'<<fixed<<val<<' ';
+            }
+            else{
+                output<<str<<' ';
+            }
+        }
+
+        str = output.str();
+        str.pop_back();
+        return str;
+    }
+};
 
 void Change(){
     string str;
