@@ -22,99 +22,70 @@ const int INF = 1e9;
 
 
 
-class Solution {
+class TextEditor {
 public:
-    int n , m ;
-    int pos[4][2] = { {0,1} , { 1,0 } ,{ 0,-1 }, {-1,0 } };
+    int idx;
+    string left ;
+    deque<char> right;
+    TextEditor() {
 
-    vector< vector<int> > DP;
-    int DFS(int x,int y,vector<vector<int> > &g){
-        if(DP[x][y] != INF ) return DP[x][y];
-        if( x==n-1 && y==m-1 ) return DP[x][y] = 0;
-
-        int ret =INF ;
-        for(int k=0;k<4;k++){
-            int i = x+pos[k][0] ,  j= y+pos[k][1];
-            if( i<0 || j<0 ||i>=n ||j>=m ) continue;
-
-            DP[x][y] = min( DP[x][y] , DFS(i,j,g) );
-            ret = min( ret , DP[x][y] );
-        } 
-
-        return DP[x][y] = ret + g[x][y] ;
     }
-
-    int minimumObstacles(vector<vector<int>>& grid) {
-        n = grid.size();
-        m = grid[0].size();
-
-        
-        vector< vector<int> > dp( n , vector<int>(m , INF ) );
-
-        dp[0][0] = grid[0][0];
-
-        // for(int i=0;i<n;i++){
-        //     for(int j=0;j<m;j++){
-        //         cout<<dp[i][j]<<' ';
-        //     }
-        //     cout<<'\n';
-        // }
-        // cout<<"===\n";
-
-        // for(int x=0;x<n;x++){
-        //     for(int y=0;y<m;y++){
-
-        //         for(int k=0;k<4;k++){
-        //             int i = x+pos[k][0] , j= y+pos[k][1];
-        //             if( i<0 || j<0 || i>=n || j>=m ) continue;
-
-        //             dp[i][j] = min( dp[i][j] , dp[x][y] + grid[i][j] );
-
-        //         }
-        //     }
-        // }
-
-        dp[n-1][m-1]=0;
-
-        for(int x=n-1;x>=0;x--){
-            for(int y=m-1;y>=0;y--){
-
-                for(int k=0;k<4;k++){
-                    int i = x+pos[k][0] , j= y+pos[k][1];
-                    if( i<0 || j<0 || i>=n || j>=m ) continue;
-
-                    dp[i][j] = min( dp[i][j] , dp[x][y] + grid[i][j] );
-
-                }
+    
+    void addText(string text) {
+        left+=text;
+    }
+    
+    int deleteText(int k) {
+        if( left.size()>k){
+            for(int i=0;i<k;i++){
+                left.pop_back();
             }
+            return k;
+        }
+        else{
+            int sz = left.size();
+            left.clear();
+            return sz;
+        }
+    }
+    
+    string cursorLeft(int k) {
+        int t = k;
+        while( left.size() && t ){
+            right.push_front( left.back() );
+            left.pop_back();
+            t--;
         }
 
-        for(int i=0;i<n;i++){
-            for(int j=0;j<m;j++){
-                cout<<dp[i][j]<<' ';
-            }
-            cout<<'\n';
+        int ret_size = min( int(left.size() ) , 10 );
+        int st = int(left.size())-ret_size;
+
+        return left.substr(st , ret_size );
+    }
+    
+    string cursorRight(int k) {
+        int t = k;
+        while( right.size() && t ){
+            left.push_back( right.front() );
+            right.pop_front();
+            t--;
         }
 
-        return dp[0][0];
+        int ret_size = min( int(left.size() ) , 10 );
+        int st = int(left.size())-ret_size;
 
-
-    //    DP.resize( n, vector<int>(m,INF) );
-
-    //     int ans = DFS(0,0,grid);
-
-    //    for(int i=0;i<n;i++){
-    //        for(int j=0;j<m;j++){
-    //            cout<<DP[i][j]<<' ';
-    //        }
-    //        cout<<'\n';
-    //    }
-
-    //    return dp[0][0];
+        return left.substr(st , ret_size );
     }
-
 };
 
+/**
+ * Your TextEditor object will be instantiated and called as such:
+ * TextEditor* obj = new TextEditor();
+ * obj->addText(text);
+ * int param_2 = obj->deleteText(k);
+ * string param_3 = obj->cursorLeft(k);
+ * string param_4 = obj->cursorRight(k);
+ */
 
 
 

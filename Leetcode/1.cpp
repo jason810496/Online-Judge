@@ -17,13 +17,26 @@ typedef vector<vector<int> > vvi;
 const int MAX_N = 100005;
 const int INF = 1e9;
 
-
-
 class Solution {
 public:
-    
-    
-    
+    int minMaxGame(vector<int>& arr) {
+        vi temp;
+        int n = arr.size();
+        while( arr.size()>1){
+            int t=n/2 , f=1;
+            for(int i=0;i<t;i++){
+                if( f ){
+                    temp.PB( min( arr[i*2] ,arr[i*2+1] ) );
+                }
+                else temp.PB( max( arr[i*2] ,arr[i*2+1] ) );
+                f^=1;
+            }
+            n>>=1;
+            arr=temp;
+            temp.clear();
+        }
+        return arr.back();
+    }
 };
 
 
@@ -47,6 +60,7 @@ int main(){
 
     Solution solve;
 
-    Change();
+    vi t1 = {1,3,5,2,4,8,2,2};
+    cout<<solve.minMaxGame(t1);
     return 0;
 }
