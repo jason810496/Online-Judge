@@ -76,7 +76,7 @@ int main (){
             Input[ R ].lose++;
             // Win change
             Input[ L ].Atk += R_val/(2*Input[L].Tran);
-            Input[ L ].Tran+= R_val/(2*Input[R].Atk );
+            Input[ L ].Tran+= R_val/(2*Input[L].Atk );
             // Lose change
             Input[ R ].Atk += Input[ R ].Atk/2;
             Input[ R ].Tran+= Input[ R ].Tran/2;
