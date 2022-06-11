@@ -17,11 +17,30 @@ const int INF = 1e9;
 
 class Solution {
 public:
-    
+    int totalSteps(vector<int>& nums) {
+        stack< pii > stk;
+        stk.push( { nums[0] , 0 } );
 
-    
+        int n  =nums.size() , ans=0 ;
+
+        for(int i=1;i<n;i++){
+            int cnt=0;
+
+            while( stk.size() && stk.top().F <= nums[i] ){
+                cnt = max( cnt , stk.top().S );
+                stk.pop();
+            }
+
+            if( stk.size() ) cnt+=1;
+            else cnt=0;
+            
+            ans = max( ans , cnt );
+            stk.push( { nums[i] , cnt } );
+        }
+
+        return ans ;
+    }
 };
-
 
 void Change(){
     string str;
@@ -40,6 +59,10 @@ int main(){
     
     Solution solve;
 
+    vector<int> t1 = {10,1,2,3,4,5,6,1,2,3}; 
+    vector<int> t2 = {5,3,4,4,7,3,6,11,8,5,11};
+    cout<<"ans "<<solve.totalSteps(t1);
+    cout<<"ans "<<solve.totalSteps(t2);
     Change();
     return 0;
 }
