@@ -14,34 +14,17 @@ ll arr[N];
 int Line[5005];
 
 bool check(ll ht){
-	vector<int> vec;
+	int len=0 , idx=1;
 
-	int len=0;
-
-	for(int i=1;i<=n;i++){
+	for(int i=1;i<=n && idx<=k;i++){
 		if(arr[i] >= ht ){
 			len++;
 		}
-		else{
-			if(len>0) vec.push_back(len);
-			len=0;
-		}
-	}
-	if(len>0) vec.push_back(len); // last 
-	
-	// cout<<ht<<" : ";
-	// for(auto i:vec){
-	// 	cout<<i<<' ';
-	// }
-	// cout<<'\n';
+		else len=0;
 
-	if( vec.size()<k) return false;
-	
-	int idx=1;
-
-	for(int i=0;i<vec.size() && idx<=k ; i++){
-		if( vec[i]>=Line[ idx ] ){
+		if( len >= Line[ idx ] ){
 			idx++;
+			len=0;
 		}
 	}
 
@@ -76,6 +59,7 @@ int main(){
 		}
 		else{
 			R= mid-1;
+			// cout<<" NO : "<<mid<<"\n";
 			//cout<<"mid-1 "<< mid <<"\n";
 		}
 	}
