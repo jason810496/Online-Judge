@@ -18,36 +18,71 @@ const int MAX_N = 100005;
 const int INF = 1e9;
 
 
-
 class Solution {
 public:
-    int n , m;
-    bool check( string &s , string &sub  ,unordered_set< int > &Mp , int idx ){
-        for(int i=0;i<m;i++){
-            if( s[ idx+i]==sub[i] ) continue;
-            else {
-                if ( Mp.find(int(sub[i])*10000+int(s[idx+i]) )==Mp.end() ) return false;
+
+    int N = 1001;
+    int BIT[1005];
+    #define low(x) x&-x
+    #define ll long long 
+
+    void Add(int idx){
+        for(int i=idx;i<=N;i+=low(i)){
+            BIT[i]+=1;
+        }
+    }
+
+    int Query(int idx){
+        int ans=0;
+        for(int i=idx;i;i-=low(i)){
+            ans+=BIT[i];
+        }
+
+        return ans;
+    }
+
+    int longestSubsequence(string s, int k) {
+        int n = s.size();
+        // cout<<s<<" "<<k<<"\n";
+        N = n;
+        memset(BIT,0,sizeof(BIT) );
+
+        ll K = k;
+
+        set<int> St;
+        for(int i=0;i<n;i++){
+            if( s[i]=='0'){
+                St.insert( i );
+                Add(i+1);
             }
         }
 
-        return true;
-    }
-    bool matchReplacement(string s, string sub, vector<vector<char>>& mappings) {
-        unordered_set< int > Mp;
+        int mx = St.size() , cnt = mx;
 
-        n=s.size();
-        m=sub.size();
+        ll cur=0;
 
-        for(auto &v:mappings){
-            Mp.insert( int(v[0])*10000+int(v[1]) );
+        for(int i=n-1;i>=0;i--){
+            if( s[i]=='0' ) continue;
+
+            int rk = cnt - Query(i+1);
+            if( rk>32 ) break;
+            // cout<<"rk : "<<rk<<"\n";
+            // cout<<"1<<rk: "<< (1<<rk) <<"\n";
+
+            if( (cur+ (1LL<<rk)) > K ) break;
+
+            cur += 1<<rk;
+            Add(i+1);
+            mx++;
+            cnt++;
+            
         }
 
-        for(int i=0;i+m<=n;i++){
-            if( check(s,sub,Mp,i) ) return true;
-        }
-        return false;
+        // cout<<" cur : "<<cur<<"\n";
+        return mx;
     }
 };
+
 
 void Change(){
     string str;
@@ -68,9 +103,9 @@ int main(){
     //OAO
 
     Solution solve;
-
-    vi t1 = {2,1,4,3,5} , t2 = {1,1,1};
-    cout<<solve.countSubarrays(t1,10);
-    cout<<solve.countSubarrays(t2,5);
+    string t1 = "1001010" , t2 = "00101001" , t3 = "001010101011010100010101101010010";
+    cout<<"\n ans : \n "<<solve.longestSubsequence(t1,5)<<"\n";
+    cout<<"\n ans : \n "<<solve.longestSubsequence(t2,1)<<"\n";
+    cout<<"\n ans : \n "<<solve.longestSubsequence(t3,93951055)<<"\n";
     return 0;
 }

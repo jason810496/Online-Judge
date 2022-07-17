@@ -3,6 +3,7 @@ using namespace std;
 #define OAO cin.tie(0);ios_base::sync_with_stdio(0);
 
 
+
 #define F first
 #define S second
 #define ll long long 
@@ -14,32 +15,27 @@ typedef pair<int,long long> pil;
 typedef vector<int> vi;
 typedef vector<vector<int> > vvi;
 const int MAX_N = 100005;
-
+const int INF = 1e9;
 
 class Solution {
 public:
-    const int INF = 1e9;
-    int minimumNumbers(int num, int k) {
-
-        vector<int> coin , dp(num+1,INF);
-        for(int v=k;v<=num;v+=10){
-            coin.push_back( v );
-        }
-
-        dp[0]=0;
-
-        for(int v=1;v<=num;v++){
-            for(int &c:coin){
-                if( c<=v ){
-                    if( dp[v-c]!=INF){
-                        dp[v]=min( dp[v] , dp[v-c]+1 );
-                    }
+    int minMaxGame(vector<int>& arr) {
+        vi temp;
+        int n = arr.size();
+        while( arr.size()>1){
+            int t=n/2 , f=1;
+            for(int i=0;i<t;i++){
+                if( f ){
+                    temp.PB( min( arr[i*2] ,arr[i*2+1] ) );
                 }
+                else temp.PB( max( arr[i*2] ,arr[i*2+1] ) );
+                f^=1;
             }
+            n>>=1;
+            arr=temp;
+            temp.clear();
         }
-
-        // cout<<"dp[num] : "<<dp[num]<<"\n";
-        return (dp[num]==INF ? -1:dp[num] );
+        return arr.back();
     }
 };
 
@@ -64,7 +60,7 @@ int main(){
 
     Solution solve;
 
-    cout<<solve.minimumNumbers(3,3);
-    cout<<solve.minimumNumbers(20,1);
+    vi t1 = {1,3,5,2,4,8,2,2};
+    cout<<solve.minMaxGame(t1);
     return 0;
 }
